@@ -147,7 +147,7 @@ export default function Home() {
         <h2 className="text-5xl font-black tracking-tight mb-3">Join <span className="text-[#E84A00]">Foundo.in</span><br />Early Access</h2>
         <p className="text-lg text-[#4B5563] mb-9">No payment. No long form. Just tell us you're in.<br />Be among the first 1000 members.</p>
         <Link href="/sign-up" className="inline-block bg-[#E84A00] text-white px-9 py-4 rounded-lg text-base font-bold hover:bg-[#cf4000] transition-colors">
-          I'm In — Join the List
+          I'm In —Join the List!
         </Link>
       </section>
 
