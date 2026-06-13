@@ -2,186 +2,154 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white text-[#1A1A1A] font-sans">
+    <main style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", background: '#fff', color: '#111', overflowX: 'hidden' }}>
+
       {/* NAV */}
-      <nav className="border-b border-[#E5E7EB] px-[6%] sticky top-0 bg-white z-50">
-        <div className="max-w-[1080px] mx-auto flex items-center justify-between h-16 gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-lg">F</div>
-            <span className="text-xl font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
+      <nav style={{ borderBottom: '1px solid #E5E7EB', padding: '0 6%', position: 'sticky', top: 0, background: '#fff', zIndex: 100 }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#E84A00', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 16 }}>F</div>
+            <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: -0.5 }}>Foundo<span style={{ color: '#E84A00' }}>.in</span></span>
           </div>
-          <div className="hidden md:flex items-center gap-2 text-sm text-[#9CA3AF]">
-            <span>✉</span>
-            <a href="mailto:contact@foundo.in" className="text-[#E84A00] font-semibold hover:underline">contact@foundo.in</a>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-[#4B5563] cursor-pointer hover:text-[#1A1A1A]">Solutions</span>
-            <span className="text-sm text-[#4B5563] cursor-pointer hover:text-[#1A1A1A]">Who It's For</span>
-            <Link href="/sign-up" className="bg-[#E84A00] text-white px-5 py-2 rounded-md text-sm font-bold hover:bg-[#cf4000] transition-colors">
-              Get Access
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <Link href="/sign-in" style={{ fontSize: 14, color: '#6B7280', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
+            <Link href="/sign-up" style={{ background: '#E84A00', color: '#fff', padding: '8px 20px', borderRadius: 6, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+              Get Early Access
             </Link>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <div className="max-w-[1080px] mx-auto px-[6%] pt-24 pb-20">
-        <div className="text-xs font-semibold text-[#E84A00] tracking-widest uppercase mb-6">India's Startup Connection Platform · 2026</div>
-        <h1 className="text-6xl md:text-7xl font-black leading-[1.05] tracking-[-2px] mb-6">
-          Every Big Dream<br />Needs <em className="not-italic text-[#E84A00]">the Right</em><br />People.
+      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '96px 6% 80px' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#E84A00', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 28 }}>
+          India · 2026 · Early Access
+        </div>
+        <h1 style={{ fontSize: 'clamp(44px, 7vw, 88px)', fontWeight: 900, lineHeight: 1.02, letterSpacing: -3, marginBottom: 28, maxWidth: 760 }}>
+          The right people<br />
+          are out there.<br />
+          <span style={{ color: '#E84A00' }}>Find them.</span>
         </h1>
-        <p className="text-lg text-[#4B5563] max-w-[500px] leading-relaxed mb-9">
-          Connecting founders, investors, students, and builders — in one place. Built for India.
+        <p style={{ fontSize: 18, color: '#4B5563', maxWidth: 440, lineHeight: 1.7, marginBottom: 40 }}>
+          Foundo connects founders, investors, students, and builders — the people who make startups happen in India.
         </p>
-        <div className="flex gap-3 flex-wrap mb-6">
-          <Link href="/sign-up" className="bg-[#E84A00] text-white px-7 py-3 rounded-lg text-base font-bold hover:bg-[#cf4000] transition-colors">
-            Join Early Access
-          </Link>
-          <button className="border border-[#D1D5DB] px-6 py-3 rounded-lg text-base font-semibold hover:border-[#9CA3AF] transition-colors">
-            Find your role →
-          </button>
-        </div>
-        <p className="text-sm text-[#9CA3AF]">No payment required · Free early access</p>
-
-        {/* METRICS */}
-        <div className="flex flex-col md:flex-row border-t border-l border-[#E5E7EB] mt-12">
-          {[
-            { val: '5Cr+', desc: 'College students with no startup ecosystem access' },
-            { val: '90%', desc: 'Founders say finding co-founders is #1 challenge' },
-            { val: '₹2–20L', desc: 'Idle mid-class investment with no trusted channel' },
-          ].map((m) => (
-            <div key={m.val} className="flex-1 p-6 border-r border-b border-[#E5E7EB]">
-              <div className="text-3xl font-black tracking-tight text-[#E84A00]">{m.val}</div>
-              <div className="text-sm text-[#4B5563] mt-1 leading-snug">{m.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* PROBLEM */}
-      <section className="bg-[#FAFAFA] border-y border-[#E5E7EB] px-[6%] py-20">
-        <div className="max-w-[1080px] mx-auto">
-          <div className="text-xs font-bold text-[#E84A00] tracking-[2px] uppercase mb-2 flex items-center gap-2">The Problem <span className="w-8 h-px bg-[#E84A00] inline-block" /></div>
-          <h2 className="text-4xl font-black tracking-tight mb-12">The talent exists.<br />The money exists.<br />The gap is connection.</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E5E7EB] border border-[#E5E7EB]">
-            {[
-              { n: '01', title: 'Students stuck alone', desc: 'College students with innovative ideas have zero access to mentors, funds, or co-builders.' },
-              { n: '02', title: 'Investors with idle money', desc: 'Mid-level investors want to back early ideas but don\'t know where to find credible founders.' },
-              { n: '03', title: 'Founders can\'t find each other', desc: 'A developer in Jaipur and a marketer in Pune are building the same thing — separately.' },
-            ].map((p) => (
-              <div key={p.n} className="bg-white p-8">
-                <div className="text-5xl font-black text-[#F3F4F6] leading-none mb-4">{p.n}</div>
-                <h3 className="text-base font-bold mb-2">{p.title}</h3>
-                <p className="text-sm text-[#4B5563] leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SOLUTIONS */}
-      <section className="px-[6%] py-20">
-        <div className="max-w-[1080px] mx-auto">
-          <div className="text-xs font-bold text-[#E84A00] tracking-[2px] uppercase mb-2 flex items-center gap-2">The Solution <span className="w-8 h-px bg-[#E84A00] inline-block" /></div>
-          <h2 className="text-4xl font-black tracking-tight mb-3">India's First Startup<br />Connection Platform.</h2>
-          <p className="text-base text-[#4B5563] max-w-[480px] leading-relaxed mb-12">One platform built for real startup connections — every person who wants to build something in India.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { tag: 'Founders', title: 'Startup Profiles', desc: 'List your idea, stage, and what you need. Go live in under 5 minutes.', cta: 'Get listed →' },
-              { tag: 'Investors', title: 'Investor Matching', desc: 'Browse real startups. No agents. No gatekeepers. Direct connect.', cta: 'Start investing →' },
-              { tag: 'Builders', title: 'Collab Requests', desc: 'Find co-builders across India to share skills, resources, and market access.', cta: 'Find your team →' },
-              { tag: 'Students', title: 'Idea Validation', desc: 'Get real community feedback before spending a single rupee.', cta: 'Validate idea →' },
-            ].map((s) => (
-              <Link href="/sign-up" key={s.tag} className="border-[1.5px] border-[#E5E7EB] rounded-xl p-6 hover:border-[#E84A00] hover:bg-[#FFF9F7] transition-all cursor-pointer group">
-                <div className="inline-block bg-[#FFF0E8] text-[#E84A00] text-xs font-bold px-2.5 py-1 rounded mb-4 tracking-wide uppercase">{s.tag}</div>
-                <h3 className="text-base font-bold mb-2">{s.title}</h3>
-                <p className="text-sm text-[#4B5563] leading-relaxed">{s.desc}</p>
-                <div className="text-[#E84A00] text-sm font-semibold mt-4">{s.cta}</div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHO */}
-      <section className="bg-[#FAFAFA] border-y border-[#E5E7EB] px-[6%] py-20">
-        <div className="max-w-[1080px] mx-auto">
-          <div className="text-xs font-bold text-[#E84A00] tracking-[2px] uppercase mb-2 flex items-center gap-2">Who It's For <span className="w-8 h-px bg-[#E84A00] inline-block" /></div>
-          <h2 className="text-4xl font-black tracking-tight mb-3">Tell us who you are.</h2>
-          <p className="text-base text-[#4B5563] max-w-[480px] leading-relaxed mb-12">We'll personalise your experience and match you with the right people from day one.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { role: 'For Students & Builders', title: 'Build something real', desc: 'Have an idea but no network? Find mentors, co-founders, and early feedback.', btn: "I'm a Student / Builder" },
-              { role: 'For Investors', title: 'Back the right idea', desc: '₹2L–20L ready to invest? Discover credible founders before everyone else.', btn: "I'm an Investor" },
-              { role: 'For Founders', title: 'Find the right people', desc: 'Need a co-founder, collaborator, or first investor? They\'re here.', btn: "I'm a Founder" },
-            ].map((w) => (
-              <div key={w.role} className="border-[1.5px] border-[#E5E7EB] rounded-xl p-8 hover:border-[#E84A00] transition-all">
-                <div className="text-xs font-bold text-[#4B5563] tracking-widest uppercase mb-3">{w.role}</div>
-                <h3 className="text-xl font-extrabold mb-2">{w.title}</h3>
-                <p className="text-sm text-[#4B5563] leading-relaxed mb-6">{w.desc}</p>
-                <Link href="/sign-up" className="block w-full bg-[#E84A00] text-white text-center py-3 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors">{w.btn}</Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* QUOTES */}
-      <div className="bg-[#E84A00] px-[6%] py-16">
-        <div className="max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { q: "I've been looking for a co-founder for 8 months. Every platform I tried was useless for this.", by: "Startup founder, Bengaluru" },
-            { q: "I want to invest in real ideas. I just don't know who to trust or where to go.", by: "IT professional, Lucknow" },
-            { q: "200 students in our college working on projects — none know how to take it forward.", by: "College professor, Hyderabad" },
-          ].map((q) => (
-            <div key={q.by}>
-              <blockquote className="text-white text-base leading-relaxed italic opacity-95 mb-3">"{q.q}"</blockquote>
-              <cite className="text-white text-sm opacity-70 not-italic">— {q.by}</cite>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* CTA */}
-      <section className="px-[6%] py-24 text-center">
-        <h2 className="text-5xl font-black tracking-tight mb-3">Join <span className="text-[#E84A00]">Foundo.in</span><br />Early Access</h2>
-        <p className="text-lg text-[#4B5563] mb-9">No payment. No long form. Just tell us you're in.<br />Be among the first 1000 members.</p>
-        <Link href="/sign-up" className="inline-block bg-[#E84A00] text-white px-9 py-4 rounded-lg text-base font-bold hover:bg-[#cf4000] transition-colors">
-          I'm In —Join the List!
+        <Link href="/sign-up" style={{ display: 'inline-block', background: '#E84A00', color: '#fff', padding: '14px 36px', borderRadius: 8, fontSize: 16, fontWeight: 700, textDecoration: 'none' }}>
+          Join Free — Early Access
         </Link>
-      </section>
+        <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 14 }}>No payment · No waitlist · Just show up</div>
+
+        {/* STAT STRIP */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, borderTop: '1px solid #E5E7EB', borderLeft: '1px solid #E5E7EB', marginTop: 72 }}>
+          {[
+            { n: '5Cr+', l: 'students with no startup access' },
+            { n: '90%', l: 'founders struggle to find co-founders' },
+            { n: '₹20L', l: 'idle investment, no trusted outlet' },
+          ].map(s => (
+            <div key={s.n} style={{ borderRight: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', padding: '28px 24px' }}>
+              <div style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1, color: '#111' }}>{s.n}</div>
+              <div style={{ fontSize: 13, color: '#6B7280', marginTop: 6, lineHeight: 1.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* THE GAP — full bleed dark section */}
+      <div style={{ background: '#111', padding: '96px 6%', margin: '0' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#E84A00', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 24 }}>The problem</div>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 52px)', fontWeight: 900, letterSpacing: -1.5, color: '#fff', maxWidth: 640, lineHeight: 1.1, marginBottom: 64 }}>
+            The talent exists.<br />The capital exists.<br />
+            <span style={{ color: '#4B5563' }}>The connection doesn't.</span>
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 1, background: '#222' }}>
+            {[
+              { who: 'The Student', pain: 'Has an idea. Has time. Has drive. Has no one to talk to about it.' },
+              { who: 'The Investor', pain: 'Has ₹5–20L sitting idle. Wants to back something real. Doesn\'t know who to trust.' },
+              { who: 'The Founder', pain: 'Building alone. Needs a co-founder, a first hire, or someone who just gets it.' },
+            ].map(p => (
+              <div key={p.who} style={{ background: '#111', padding: '36px 32px' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#E84A00', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 }}>{p.who}</div>
+                <p style={{ fontSize: 16, color: '#9CA3AF', lineHeight: 1.7 }}>{p.pain}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* WHAT FOUNDO DOES */}
+      <div style={{ padding: '96px 6%', maxWidth: 1080, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#E84A00', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 24 }}>What we do</div>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900, letterSpacing: -1.5, marginBottom: 16, lineHeight: 1.1 }}>
+          One place.<br />Every person you need.
+        </h2>
+        <p style={{ fontSize: 16, color: '#4B5563', maxWidth: 480, lineHeight: 1.7, marginBottom: 64 }}>
+          Post your startup. Browse investors. Find co-founders. Validate ideas. All in one platform built specifically for India's startup ecosystem.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+          {[
+            { tag: 'Founders', title: 'Startup Profiles', body: 'List your idea and what you need. Live in 5 minutes.' },
+            { tag: 'Investors', title: 'Direct Access', body: 'No agents. Browse real founders. Connect directly.' },
+            { tag: 'Builders', title: 'Collab Board', body: 'Find your team. Share skills. Build together.' },
+            { tag: 'Students', title: 'Idea Validation', body: 'Real feedback before you spend a single rupee.' },
+          ].map(f => (
+            <div key={f.tag} style={{ border: '1.5px solid #E5E7EB', borderRadius: 12, padding: '28px 24px' }}>
+              <div style={{ display: 'inline-block', background: '#FFF0E8', color: '#E84A00', fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 4, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 16 }}>{f.tag}</div>
+              <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{f.title}</h3>
+              <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.65 }}>{f.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* SOCIAL PROOF */}
+      <div style={{ background: '#E84A00', padding: '72px 6%' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 40 }}>
+          {[
+            { q: '8 months looking for a co-founder. Every platform I tried was useless for this.', by: 'Founder, Bengaluru' },
+            { q: 'I want to invest in real ideas. I just don\'t know who to trust or where to go.', by: 'IT professional, Lucknow' },
+            { q: '200 students in our college working on projects. None know how to take it forward.', by: 'Professor, Hyderabad' },
+          ].map(q => (
+            <div key={q.by}>
+              <blockquote style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.7, color: '#fff', marginBottom: 12, fontStyle: 'italic', opacity: 0.95 }}>"{q.q}"</blockquote>
+              <cite style={{ fontSize: 12, color: '#fff', opacity: 0.6, fontStyle: 'normal' }}>— {q.by}</cite>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* BOTTOM CTA */}
+      <div style={{ padding: '112px 6%', textAlign: 'center' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#E84A00', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 20 }}>Free · Early Access · 2026</div>
+        <h2 style={{ fontSize: 'clamp(32px, 5vw, 64px)', fontWeight: 900, letterSpacing: -2, marginBottom: 16, lineHeight: 1.05 }}>
+          Your people are<br />already here.
+        </h2>
+        <p style={{ fontSize: 17, color: '#4B5563', marginBottom: 40 }}>Be among the first 1000 members on Foundo.in.</p>
+        <Link href="/sign-up" style={{ display: 'inline-block', background: '#E84A00', color: '#fff', padding: '16px 48px', borderRadius: 8, fontSize: 17, fontWeight: 700, textDecoration: 'none' }}>
+          Join Now — It's Free
+        </Link>
+      </div>
 
       {/* FOOTER */}
-      <footer className="bg-[#111] px-[6%] pt-12 pb-8">
-        <div className="max-w-[1080px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
-            <div>
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="w-9 h-9 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-lg">F</div>
-                <span className="text-xl font-black tracking-tight text-white">Foundo<span className="text-[#E84A00]">.in</span></span>
-              </div>
-              <p className="text-sm text-[#9CA3AF] leading-relaxed max-w-[280px] mb-5">India doesn't need more noise — it needs better connections.</p>
-              <a href="mailto:contact@foundo.in" className="text-sm text-[#9CA3AF] hover:text-[#E84A00] transition-colors">contact@foundo.in</a>
+      <footer style={{ background: '#111', padding: '48px 6% 32px' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#E84A00', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 16 }}>F</div>
+              <span style={{ fontSize: 18, fontWeight: 900, color: '#fff', letterSpacing: -0.5 }}>Foundo<span style={{ color: '#E84A00' }}>.in</span></span>
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-4">Platform</h4>
-              {['Startup Profiles', 'Investor Matching', 'Collab Requests', 'Idea Validation'].map(l => (
-                <Link key={l} href="/sign-up" className="block text-sm text-[#9CA3AF] hover:text-white transition-colors mb-2.5">{l}</Link>
-              ))}
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-4">Join As</h4>
-              {['Student / Builder', 'Investor', 'Founder', 'Get Early Access'].map(l => (
-                <Link key={l} href="/sign-up" className="block text-sm text-[#9CA3AF] hover:text-white transition-colors mb-2.5">{l}</Link>
-              ))}
+            <div style={{ display: 'flex', gap: 24 }}>
+              <Link href="/startups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>Browse Startups</Link>
+              <Link href="/sign-up" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>Join</Link>
+              <a href="mailto:contact@foundo.in" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>Contact</a>
             </div>
           </div>
-          <div className="border-t border-[#222] pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-            <span className="text-sm text-[#4B5563]">© 2026 <span className="text-[#E84A00] font-bold">Foundo.in</span> · All rights reserved</span>
-            <span className="text-sm text-[#4B5563]">Made with purpose · Built for India 🇮🇳</span>
+          <div style={{ borderTop: '1px solid #222', paddingTop: 24, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+            <span style={{ fontSize: 12, color: '#4B5563' }}>© 2026 Foundo.in · All rights reserved</span>
+            <span style={{ fontSize: 12, color: '#4B5563' }}>Built for India 🇮🇳</span>
           </div>
         </div>
       </footer>
+
     </main>
   )
 }
