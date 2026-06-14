@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
+import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
+import ConnectButton from '@/components/ConnectButton'
 
 const stageColors: Record<string, string> = {
   IDEA: 'bg-purple-100 text-purple-700',
@@ -12,14 +14,29 @@ const stageColors: Record<string, string> = {
 
 export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const { userId } = await auth()
+
   const startup = await prisma.startup.findUnique({
     where: { id },
     include: {
-      user: { select: { name: true, city: true, email: true } },
+      user: { select: { name: true, city: true, email: true, clerkId: true } },
     },
   })
 
   if (!startup) notFound()
+
+  const isOwner = userId === startup.user.clerkId
+
+  let alreadyConnected = false
+  if (userId && !isOwner) {
+    const currentUser = await prisma.user.findUnique({ where: { clerkId: userId } })
+    if (currentUser) {
+      const existing = await prisma.connection.findFirst({
+        where: { fromUserId: currentUser.id, startupId: startup.id }
+      })
+      alreadyConnected = !!existing
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
@@ -28,9 +45,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
           <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
           <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
         </div>
-        <Link href="/startups" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">
-          ← Browse Startups
-        </Link>
+        <Link href="/startups" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">← Browse Startups</Link>
       </nav>
 
       <div className="max-w-[720px] mx-auto px-[6%] py-12">
@@ -74,7 +89,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
           </div>
         )}
 
-        {/* FOUNDER */}
+        {/* FOUNDER + CONNECT */}
         <div className="bg-white border border-[#E5E7EB] rounded-xl p-8 mb-6">
           <h2 className="text-xs font-bold text-[#9CA3AF] uppercase tracking-widest mb-4">Founded By</h2>
           <div className="flex items-center justify-between">
@@ -82,7 +97,18 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
               <div className="font-bold text-[#1A1A1A]">{startup.user.name}</div>
               {startup.city && <div className="text-sm text-[#9CA3AF] mt-0.5">📍 {startup.city}</div>}
             </div>
-            <a href={`mailto:${startup.user.email}`} className="bg-[#E84A00] text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors">Get in Touch</a>
+            {isOwner ? (
+              <span className="text-sm text-[#9CA3AF] font-semibold">Your startup</span>
+            ) : userId ? (
+              <ConnectButton
+                startupId={startup.id}
+                alreadyConnected={alreadyConnected}
+              />
+            ) : (
+              <Link href="/sign-up" className="bg-[#E84A00] text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors">
+                Sign up to Connect
+              </Link>
+            )}
           </div>
         </div>
 
@@ -92,14 +118,10 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
             <h2 className="text-xs font-bold text-[#9CA3AF] uppercase tracking-widest mb-4">Links</h2>
             <div className="flex gap-4">
               {startup.website && (
-                <a href={startup.website} target="_blank" rel="noopener noreferrer" className="text-[#E84A00] font-semibold text-sm hover:underline">
-                  🌐 Website
-                </a>
+                <a href={startup.website} target="_blank" rel="noopener noreferrer" className="text-[#E84A00] font-semibold text-sm hover:underline">🌐 Website</a>
               )}
               {startup.linkedin && (
-                <a href={startup.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#E84A00] font-semibold text-sm hover:underline">
-                  💼 LinkedIn
-                </a>
+                <a href={startup.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#E84A00] font-semibold text-sm hover:underline">💼 LinkedIn</a>
               )}
             </div>
           </div>
