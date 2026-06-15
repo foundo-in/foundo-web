@@ -94,11 +94,13 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
           <h2 className="text-xs font-bold text-[#9CA3AF] uppercase tracking-widest mb-4">Founded By</h2>
           <div className="flex items-center justify-between">
             <div>
-              <div className="font-bold text-[#1A1A1A]">{startup.user.name}</div>
+              <Link href={`/profile/${startup.userId}`} className="font-bold text-[#1A1A1A] hover:text-[#E84A00] transition-colors">{startup.user.name}</Link>
               {startup.city && <div className="text-sm text-[#9CA3AF] mt-0.5">📍 {startup.city}</div>}
             </div>
             {isOwner ? (
-              <span className="text-sm text-[#9CA3AF] font-semibold">Your startup</span>
+              <Link href={`/startups/${startup.id}/edit`} className="bg-white border border-[#E5E7EB] text-[#1A1A1A] px-5 py-2.5 rounded-lg text-sm font-bold hover:border-[#E84A00] transition-colors">
+                Edit →
+              </Link>
             ) : userId ? (
               <ConnectButton
                 startupId={startup.id}
