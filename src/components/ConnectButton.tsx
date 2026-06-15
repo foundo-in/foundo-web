@@ -40,34 +40,52 @@ export default function ConnectButton({
 
   if (connected) {
     return (
-      <span className="bg-green-100 text-green-700 text-sm font-bold px-4 py-2.5 rounded-lg">
-        ✓ Request Sent
+      <span style={{
+        fontSize: 12, fontWeight: 700, color: '#15803D',
+        border: '1.5px solid #15803D', padding: '10px 20px',
+        letterSpacing: 1, textTransform: 'uppercase',
+      }}>
+        Request Sent
       </span>
     )
   }
 
   if (showForm) {
     return (
-      <div className="flex flex-col gap-2 w-64">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: 300 }}>
         <textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
-          placeholder="Introduce yourself briefly... (optional)"
+          placeholder="Introduce yourself briefly (optional)"
           rows={3}
-          className="border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#E84A00] resize-none"
+          style={{
+            border: '1px solid #E5E7EB',
+            padding: '10px 12px',
+            fontSize: 13,
+            outline: 'none',
+            resize: 'none',
+            fontFamily: 'inherit',
+            color: '#111',
+            transition: 'border-color 0.15s',
+            borderRadius: 0,
+          }}
+          onFocus={e => (e.target.style.borderColor = '#E84A00')}
+          onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
         />
-        {error && <p className="text-red-500 text-xs">{error}</p>}
-        <div className="flex gap-2">
+        {error && <p style={{ color: '#B91C1C', fontSize: 12, margin: 0 }}>{error}</p>}
+        <div style={{ display: 'flex', gap: 8 }}>
           <button
             onClick={handleConnect}
             disabled={loading}
-            className="flex-1 bg-[#E84A00] text-white py-2 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors disabled:opacity-40"
+            className="btn-primary"
+            style={{ flex: 1, fontSize: 13 }}
           >
             {loading ? 'Sending...' : 'Send Request'}
           </button>
           <button
             onClick={() => setShowForm(false)}
-            className="px-3 py-2 border border-[#E5E7EB] rounded-lg text-sm text-[#4B5563] hover:border-[#9CA3AF]"
+            className="btn-outline"
+            style={{ fontSize: 13 }}
           >
             Cancel
           </button>
@@ -79,9 +97,9 @@ export default function ConnectButton({
   return (
     <button
       onClick={() => setShowForm(true)}
-      className="bg-[#E84A00] text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors"
+      className="btn-primary"
     >
-      Connect →
+      Connect
     </button>
   )
 }

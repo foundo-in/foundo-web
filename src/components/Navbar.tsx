@@ -16,67 +16,139 @@ export default function Navbar({
   const pathname = usePathname()
 
   return (
-    <nav className="bg-white border-b border-[#E5E7EB] px-[6%] sticky top-0 z-50">
-      <div className="max-w-[1080px] mx-auto flex items-center justify-between h-16">
-        <Link href={userName ? '/dashboard' : '/'} className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
+    <nav style={{
+      background: '#fff',
+      borderBottom: '1px solid #E5E7EB',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50,
+    }}>
+      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '0 6%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+        {/* Logo */}
+        <Link
+          href={userName ? '/dashboard' : '/'}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
+        >
+          <div style={{
+            width: 30, height: 30,
+            borderRadius: '50%',
+            background: '#E84A00',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontWeight: 900, fontSize: 15,
+          }}>F</div>
+          <span style={{ fontSize: 17, fontWeight: 900, letterSpacing: -0.5, color: '#111' }}>
+            Foundo<span style={{ color: '#E84A00' }}>.in</span>
+          </span>
         </Link>
 
-        {/* DESKTOP */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/startups" className={`text-sm transition-colors ${pathname === '/startups' ? 'text-[#E84A00] font-semibold' : 'text-[#4B5563] hover:text-[#1A1A1A]'}`}>Browse</Link>
+        {/* Desktop nav */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-desktop">
+          <Link
+            href="/startups"
+            style={{
+              fontSize: 13, fontWeight: 600, textDecoration: 'none',
+              color: pathname === '/startups' ? '#E84A00' : '#4B5563',
+              letterSpacing: 0.2,
+            }}
+          >
+            Browse
+          </Link>
           {userName && (
-            <Link href="/connections" className={`text-sm transition-colors ${pathname === '/connections' ? 'text-[#E84A00] font-semibold' : 'text-[#4B5563] hover:text-[#1A1A1A]'}`}>Connections</Link>
+            <Link
+              href="/connections"
+              style={{
+                fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                color: pathname === '/connections' ? '#E84A00' : '#4B5563',
+                letterSpacing: 0.2,
+              }}
+            >
+              Connections
+            </Link>
           )}
           {userName ? (
             <>
-              <Link href="/dashboard" className="text-sm text-[#4B5563] hover:text-[#1A1A1A] transition-colors">{userName}</Link>
+              <Link
+                href="/dashboard"
+                style={{ fontSize: 13, fontWeight: 600, color: '#4B5563', textDecoration: 'none' }}
+              >
+                {userName}
+              </Link>
               <SignOutButton>
-                <button className="text-sm text-[#4B5563] hover:text-[#1A1A1A] transition-colors cursor-pointer">Sign out</button>
+                <button style={{
+                  fontSize: 13, fontWeight: 600, color: '#9CA3AF',
+                  background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                }}>
+                  Sign out
+                </button>
               </SignOutButton>
             </>
           ) : showAuth ? (
             <>
-              <Link href="/sign-in" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">Sign in</Link>
-              <Link href="/sign-up" className="bg-[#E84A00] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors">Get Access</Link>
+              <Link
+                href="/sign-in"
+                style={{ fontSize: 13, fontWeight: 600, color: '#4B5563', textDecoration: 'none' }}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/sign-up"
+                style={{
+                  fontSize: 13, fontWeight: 700, color: '#fff',
+                  background: '#E84A00', padding: '8px 20px',
+                  borderRadius: 6, textDecoration: 'none',
+                  letterSpacing: 0.2,
+                }}
+              >
+                Get Access
+              </Link>
             </>
           ) : null}
         </div>
 
-        {/* MOBILE HAMBURGER */}
+        {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          className="nav-mobile-btn"
           onClick={() => setMenuOpen(!menuOpen)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'none' }}
         >
-          <span className={`block w-5 h-0.5 bg-[#1A1A1A] transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-5 h-0.5 bg-[#1A1A1A] transition-all ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-5 h-0.5 bg-[#1A1A1A] transition-all ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <div style={{ width: 20, height: 1.5, background: '#111', marginBottom: 5, transition: 'all 0.2s', transform: menuOpen ? 'rotate(45deg) translateY(6.5px)' : 'none' }} />
+          <div style={{ width: 20, height: 1.5, background: '#111', marginBottom: 5, transition: 'all 0.2s', opacity: menuOpen ? 0 : 1 }} />
+          <div style={{ width: 20, height: 1.5, background: '#111', transition: 'all 0.2s', transform: menuOpen ? 'rotate(-45deg) translateY(-6.5px)' : 'none' }} />
         </button>
       </div>
 
-      {/* MOBILE MENU */}
+      {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-[#E5E7EB] py-4 space-y-3">
-          <Link href="/startups" className="block text-sm text-[#4B5563] py-2" onClick={() => setMenuOpen(false)}>Browse Startups</Link>
-          {userName && (
-            <Link href="/connections" className="block text-sm text-[#4B5563] py-2" onClick={() => setMenuOpen(false)}>Connections</Link>
-          )}
+        <div style={{
+          borderTop: '1px solid #E5E7EB',
+          padding: '16px 6%',
+          display: 'flex', flexDirection: 'column', gap: 4,
+          background: '#fff',
+        }}>
+          <Link href="/startups" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Browse Startups</Link>
+          {userName && <Link href="/connections" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Connections</Link>}
           {userName ? (
             <>
-              <Link href="/dashboard" className="block text-sm text-[#4B5563] py-2" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link href="/dashboard" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Dashboard</Link>
               <SignOutButton>
-                <button className="block text-sm text-[#4B5563] py-2 cursor-pointer">Sign out</button>
+                <button style={{ fontSize: 14, color: '#9CA3AF', background: 'none', border: 'none', textAlign: 'left', padding: '10px 0', cursor: 'pointer' }}>Sign out</button>
               </SignOutButton>
             </>
           ) : (
             <>
-              <Link href="/sign-in" className="block text-sm text-[#4B5563] py-2" onClick={() => setMenuOpen(false)}>Sign in</Link>
-              <Link href="/sign-up" className="block bg-[#E84A00] text-white px-4 py-2.5 rounded-lg text-sm font-bold text-center" onClick={() => setMenuOpen(false)}>Get Early Access</Link>
+              <Link href="/sign-in" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Sign in</Link>
+              <Link href="/sign-up" style={{ fontSize: 14, fontWeight: 700, color: '#fff', background: '#E84A00', textDecoration: 'none', padding: '12px 0', textAlign: 'center', borderRadius: 6, marginTop: 8 }} onClick={() => setMenuOpen(false)}>Get Early Access</Link>
             </>
           )}
         </div>
       )}
+
+      <style>{`
+        @media (max-width: 767px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: block !important; }
+        }
+      `}</style>
     </nav>
   )
 }

@@ -1,15 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import Link from 'next/link'
 import StartupsClient from '@/components/StartupsClient'
 import Navbar from '@/components/Navbar'
-
-const stageColors: Record<string, string> = {
-  IDEA: 'bg-purple-100 text-purple-700',
-  VALIDATION: 'bg-blue-100 text-blue-700',
-  MVP: 'bg-yellow-100 text-yellow-700',
-  GROWTH: 'bg-green-100 text-green-700',
-  SCALING: 'bg-orange-100 text-orange-700',
-}
 
 export default async function StartupsPage() {
   const startups = await prisma.startup.findMany({
@@ -21,16 +12,23 @@ export default async function StartupsPage() {
   })
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA]">
+    <main style={{ minHeight: '100vh', background: '#F7F7F7' }}>
       <Navbar showAuth />
 
-      <div className="max-w-[1080px] mx-auto px-[6%] py-12">
-        <div className="mb-10">
-          <h1 className="text-4xl font-black tracking-tight mb-2">Startups</h1>
-          <p className="text-[#4B5563]">Discover what people are building across India.</p>
+      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '64px 6%' }}>
+        <div style={{ marginBottom: 48, paddingBottom: 40, borderBottom: '1px solid #E5E7EB' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#E84A00', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 16 }}>
+            Discover
+          </div>
+          <h1 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.05, marginBottom: 12, color: '#111' }}>
+            Startups
+          </h1>
+          <p style={{ fontSize: 16, color: '#4B5563', maxWidth: 480, lineHeight: 1.6 }}>
+            Discover what people are building across India.
+          </p>
         </div>
 
-        <StartupsClient startups={startups} stageColors={stageColors} />
+        <StartupsClient startups={startups} />
       </div>
     </main>
   )

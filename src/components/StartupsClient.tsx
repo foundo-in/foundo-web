@@ -5,6 +5,14 @@ import Link from 'next/link'
 
 const STAGES = ['All', 'IDEA', 'VALIDATION', 'MVP', 'GROWTH', 'SCALING']
 
+const stageBadgeClass: Record<string, string> = {
+  IDEA:       'badge badge-idea',
+  VALIDATION: 'badge badge-validation',
+  MVP:        'badge badge-mvp',
+  GROWTH:     'badge badge-growth',
+  SCALING:    'badge badge-scaling',
+}
+
 type Startup = {
   id: string
   name: string
@@ -16,13 +24,7 @@ type Startup = {
   user: { name: string | null; city: string | null }
 }
 
-export default function StartupsClient({
-  startups,
-  stageColors,
-}: {
-  startups: Startup[]
-  stageColors: Record<string, string>
-}) {
+export default function StartupsClient({ startups }: { startups: Startup[] }) {
   const [search, setSearch] = useState('')
   const [stage, setStage] = useState('All')
 
@@ -36,32 +38,53 @@ export default function StartupsClient({
         s.city?.toLowerCase().includes(search.toLowerCase())
 
       const matchesStage = stage === 'All' || s.stage === stage
-
       return matchesSearch && matchesStage
     })
   }, [startups, search, stage])
 
   return (
     <div>
-      {/* SEARCH + FILTERS */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      {/* FILTERS */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' }} className="filter-row">
         <input
           type="text"
           placeholder="Search by name, tag, or city..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="flex-1 border border-[#E5E7EB] rounded-lg px-4 py-3 text-sm outline-none focus:border-[#E84A00] transition-colors bg-white"
+          style={{
+            flex: 1, minWidth: 200,
+            border: '1px solid #E5E7EB',
+            background: '#fff',
+            padding: '10px 16px',
+            fontSize: 14,
+            color: '#111',
+            outline: 'none',
+            borderRadius: 0,
+            fontFamily: 'inherit',
+            transition: 'border-color 0.15s',
+          }}
+          onFocus={e => (e.target.style.borderColor = '#E84A00')}
+          onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
         />
-        <div className="flex gap-2 flex-wrap">
+        <div style={{ display: 'flex', gap: 0, border: '1px solid #E5E7EB', background: '#fff' }}>
           {STAGES.map(s => (
             <button
               key={s}
               onClick={() => setStage(s)}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                stage === s
-                  ? 'bg-[#E84A00] text-white'
-                  : 'bg-white border border-[#E5E7EB] text-[#4B5563] hover:border-[#E84A00]'
-              }`}
+              style={{
+                padding: '10px 16px',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: 1.5,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                border: 'none',
+                borderRight: s !== 'SCALING' ? '1px solid #E5E7EB' : 'none',
+                background: stage === s ? '#E84A00' : 'transparent',
+                color: stage === s ? '#fff' : '#6B7280',
+                transition: 'all 0.1s',
+                fontFamily: 'inherit',
+              }}
             >
               {s === 'All' ? 'All' : s.charAt(0) + s.slice(1).toLowerCase()}
             </button>
@@ -69,51 +92,93 @@ export default function StartupsClient({
         </div>
       </div>
 
-      {/* RESULTS COUNT */}
-      <div className="text-xs text-[#9CA3AF] font-semibold uppercase tracking-widest mb-6">
+      {/* RESULT COUNT */}
+      <div style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 24 }}>
         {filtered.length} {filtered.length === 1 ? 'startup' : 'startups'}
       </div>
 
       {/* GRID */}
       {filtered.length === 0 ? (
-        <div className="text-center py-24">
-          <div className="text-5xl mb-4">🔍</div>
-          <h2 className="text-2xl font-black mb-2">No results</h2>
-          <p className="text-[#4B5563]">Try a different search or filter.</p>
+        <div style={{ background: '#fff', border: '1px solid #E5E7EB', padding: '64px 32px', textAlign: 'center' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 8 }}>No results found</div>
+          <p style={{ fontSize: 13, color: '#9CA3AF' }}>Try a different search or stage filter.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gap: 1, background: '#E5E7EB' }} className="grid-startups">
           {filtered.map((startup) => (
             <Link
               href={`/startups/${startup.id}`}
               key={startup.id}
-              className="bg-white border border-[#E5E7EB] rounded-xl p-6 hover:border-[#E84A00] transition-all group"
+              style={{
+                background: '#fff',
+                padding: '28px 32px',
+                textDecoration: 'none',
+                color: 'inherit',
+                display: 'block',
+                transition: 'background 0.1s',
+              }}
+              className="startup-card"
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-lg bg-[#FFF0E8] flex items-center justify-center text-[#E84A00] font-black text-lg">
-                  {startup.name.charAt(0)}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, flexWrap: 'wrap' }}>
+                  <div style={{
+                    width: 36, height: 36,
+                    background: '#FFF0E8',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#E84A00', fontWeight: 900, fontSize: 15, flexShrink: 0,
+                    borderRadius: 2,
+                  }}>
+                    {startup.name.charAt(0)}
+                  </div>
+                  <span style={{ fontSize: 16, fontWeight: 800, color: '#111', letterSpacing: -0.3 }}>
+                    {startup.name}
+                  </span>
                 </div>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${stageColors[startup.stage]}`}>
+                <span className={stageBadgeClass[startup.stage]} style={{ flexShrink: 0 }}>
                   {startup.stage.charAt(0) + startup.stage.slice(1).toLowerCase()}
                 </span>
               </div>
-              <h3 className="text-lg font-black mb-1 group-hover:text-[#E84A00] transition-colors">{startup.name}</h3>
-              <p className="text-sm text-[#4B5563] mb-3">{startup.tagline}</p>
+
+              <p style={{ fontSize: 13, color: '#4B5563', lineHeight: 1.6, marginBottom: 16, marginLeft: 48 }}>
+                {startup.tagline}
+              </p>
+
               {startup.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {startup.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="bg-[#F3F4F6] text-[#4B5563] text-xs px-2 py-0.5 rounded-full">{tag}</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginLeft: 48, marginBottom: 16 }}>
+                  {startup.tags.slice(0, 4).map(tag => (
+                    <span key={tag} style={{
+                      fontSize: 11, fontWeight: 700, color: '#6B7280',
+                      border: '1px solid #E5E7EB', padding: '2px 8px',
+                      letterSpacing: 0.5, textTransform: 'uppercase',
+                    }}>
+                      {tag}
+                    </span>
                   ))}
                 </div>
               )}
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#F3F4F6]">
-                <span className="text-xs text-[#9CA3AF]">{startup.user.name}</span>
-                {startup.city && <span className="text-xs text-[#9CA3AF]">📍 {startup.city}</span>}
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: 48, paddingTop: 12, borderTop: '1px solid #F3F4F6' }}>
+                <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 500 }}>
+                  {startup.user.name}
+                </span>
+                {startup.city && (
+                  <span style={{ fontSize: 12, color: '#9CA3AF' }}>
+                    {startup.city}
+                  </span>
+                )}
               </div>
             </Link>
           ))}
         </div>
       )}
+
+      <style>{`
+        .grid-startups { grid-template-columns: 1fr; }
+        @media (min-width: 768px)  { .grid-startups { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .grid-startups { grid-template-columns: repeat(3, 1fr); } }
+        .startup-card:hover { background: #FAFAFA !important; }
+        @media (max-width: 639px) { .filter-row { flex-direction: column; } }
+      `}</style>
     </div>
   )
 }

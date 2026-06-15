@@ -1,26 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+/* ─── COLOR TOKENS ─────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand:        #E84A00;
+  --brand-light:  #FFF0E8;
+  --ink:          #111111;
+  --body:         #4B5563;
+  --muted:        #9CA3AF;
+  --border:       #E5E7EB;
+  --surface:      #FFFFFF;
+  --ground:       #F7F7F7;
+
+  /* ─── SPACING SCALE ──────────────────────────────────── */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 64px;
+  --s9: 96px;
+
+  /* ─── TYPOGRAPHY SCALE ───────────────────────────────── */
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-lg:   17px;
+  --text-xl:   22px;
+  --text-2xl:  28px;
+  --text-3xl:  40px;
+  --text-hero: clamp(44px, 7vw, 80px);
+
+  /* ─── BORDER RADIUS ──────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-full: 9999px;
+
+  /* ─── SHADOWS ─────────────────────────────────────────── */
+  --shadow-card:  0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-modal: 0 20px 60px rgba(0,0,0,0.12);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── BASE ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ─── UTILITY CLASSES ──────────────────────────────────── */
+
+/* Card — white surface with border, radius, shadow */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.card:hover {
+  border-color: var(--brand);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Badge — small pill label */
+.badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-brand { background: var(--brand-light); color: var(--brand); }
+.badge-gray  { background: #F3F4F6; color: var(--body); }
+
+/* Stage-specific badge colors */
+.badge-idea       { background: #F3E8FF; color: #7C3AED; }
+.badge-validation { background: #DBEAFE; color: #1D4ED8; }
+.badge-mvp        { background: #FEF9C3; color: #A16207; }
+.badge-growth     { background: #DCFCE7; color: #15803D; }
+.badge-scaling    { background: var(--brand-light); color: var(--brand); }
+
+/* Status badge colors */
+.badge-pending  { background: #FEF9C3; color: #A16207; }
+.badge-accepted { background: #DCFCE7; color: #15803D; }
+.badge-declined { background: #FEE2E2; color: #B91C1C; }
+
+/* Buttons */
+.btn-primary {
+  background: #E84A00;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  font-family: inherit;
+}
+.btn-primary:hover { background: #cf4000; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-outline {
+  background: transparent;
+  color: #111;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 0;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-outline:hover { border-color: #E84A00; color: #E84A00; }
+
