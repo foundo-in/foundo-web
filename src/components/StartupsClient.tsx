@@ -4,23 +4,18 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 
 const STAGES = ['All', 'IDEA', 'VALIDATION', 'MVP', 'GROWTH', 'SCALING']
+const STAGE_LABELS: Record<string, string> = {
+  All: 'All', IDEA: 'Idea', VALIDATION: 'Validation', MVP: 'MVP', GROWTH: 'Growth', SCALING: 'Scaling'
+}
 
-const stageBadgeClass: Record<string, string> = {
-  IDEA:       'badge badge-idea',
-  VALIDATION: 'badge badge-validation',
-  MVP:        'badge badge-mvp',
-  GROWTH:     'badge badge-growth',
-  SCALING:    'badge badge-scaling',
+const stageBadge: Record<string, string> = {
+  IDEA: 'badge badge-idea', VALIDATION: 'badge badge-validation',
+  MVP: 'badge badge-mvp', GROWTH: 'badge badge-growth', SCALING: 'badge badge-scaling',
 }
 
 type Startup = {
-  id: string
-  name: string
-  tagline: string
-  stage: string
-  city: string | null
-  tags: string[]
-  lookingFor: string[]
+  id: string; name: string; tagline: string; stage: string
+  city: string | null; tags: string[]; lookingFor: string[]
   user: { name: string | null; city: string | null }
 }
 
@@ -28,142 +23,208 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
   const [search, setSearch] = useState('')
   const [stage, setStage] = useState('All')
 
-  const filtered = useMemo(() => {
-    return startups.filter(s => {
-      const matchesSearch =
-        search === '' ||
-        s.name.toLowerCase().includes(search.toLowerCase()) ||
-        s.tagline.toLowerCase().includes(search.toLowerCase()) ||
-        s.tags.some(t => t.toLowerCase().includes(search.toLowerCase())) ||
-        s.city?.toLowerCase().includes(search.toLowerCase())
-
-      const matchesStage = stage === 'All' || s.stage === stage
-      return matchesSearch && matchesStage
-    })
-  }, [startups, search, stage])
+  const filtered = useMemo(() => startups.filter(s => {
+    const q = search.toLowerCase()
+    const matchSearch = !q ||
+      s.name.toLowerCase().includes(q) ||
+      s.tagline.toLowerCase().includes(q) ||
+      s.tags.some(t => t.toLowerCase().includes(q)) ||
+      (s.city ?? '').toLowerCase().includes(q)
+    return matchSearch && (stage === 'All' || s.stage === stage)
+  }), [startups, search, stage])
 
   return (
     <div>
-      {/* FILTERS */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' }} className="filter-row">
-        <input
-          type="text"
-          placeholder="Search by name, tag, or city..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{
-            flex: 1, minWidth: 200,
-            border: '1px solid #E5E7EB',
-            background: '#fff',
-            padding: '10px 16px',
-            fontSize: 14,
-            color: '#111',
-            outline: 'none',
-            borderRadius: 0,
-            fontFamily: 'inherit',
-            transition: 'border-color 0.15s',
-          }}
-          onFocus={e => (e.target.style.borderColor = '#E84A00')}
-          onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
-        />
-        <div style={{ display: 'flex', gap: 0, border: '1px solid #E5E7EB', background: '#fff' }}>
-          {STAGES.map(s => (
+      {/* ── FILTER BAR ───────────────────────────────── */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 36 }}>
+
+        {/* Search */}
+        <div style={{ position: 'relative' }}>
+          <svg
+            style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--n400)', pointerEvents: 'none' }}
+            width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search by name, tag, or city…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              width: '100%',
+              height: 44,
+              paddingLeft: 40, paddingRight: 14,
+              fontSize: 14, fontFamily: 'inherit',
+              background: '#fff',
+              border: '1px solid var(--n200)',
+              borderRadius: 10,
+              outline: 'none',
+              color: 'var(--ink)',
+              transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+              boxShadow: 'var(--sh-xs)',
+            }}
+            onFocus={e => {
+              e.target.style.borderColor = 'var(--brand)'
+              e.target.style.boxShadow = '0 0 0 3px rgba(232,74,0,0.09)'
+            }}
+            onBlur={e => {
+              e.target.style.borderColor = 'var(--n200)'
+              e.target.style.boxShadow = 'var(--sh-xs)'
+            }}
+          />
+          {search && (
             <button
-              key={s}
-              onClick={() => setStage(s)}
+              onClick={() => setSearch('')}
               style={{
-                padding: '10px 16px',
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: 1.5,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                border: 'none',
-                borderRight: s !== 'SCALING' ? '1px solid #E5E7EB' : 'none',
-                background: stage === s ? '#E84A00' : 'transparent',
-                color: stage === s ? '#fff' : '#6B7280',
-                transition: 'all 0.1s',
-                fontFamily: 'inherit',
+                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                background: 'var(--n200)', border: 'none', cursor: 'pointer',
+                width: 20, height: 20, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--n600)', fontSize: 12, fontWeight: 700,
               }}
+              aria-label="Clear search"
             >
-              {s === 'All' ? 'All' : s.charAt(0) + s.slice(1).toLowerCase()}
+              ×
             </button>
-          ))}
+          )}
+        </div>
+
+        {/* Stage pills */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {STAGES.map(s => {
+            const active = stage === s
+            return (
+              <button
+                key={s}
+                onClick={() => setStage(s)}
+                style={{
+                  height: 32,
+                  padding: '0 14px',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                  borderRadius: 'var(--r-full)',
+                  border: active ? '1px solid var(--brand)' : '1px solid var(--n200)',
+                  background: active ? 'var(--brand)' : '#fff',
+                  color: active ? '#fff' : 'var(--n600)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: active ? '0 1px 4px rgba(232,74,0,0.2)' : 'var(--sh-xs)',
+                  letterSpacing: '0.1px',
+                }}
+              >
+                {STAGE_LABELS[s]}
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      {/* RESULT COUNT */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 24 }}>
-        {filtered.length} {filtered.length === 1 ? 'startup' : 'startups'}
+      {/* ── RESULT META ──────────────────────────────── */}
+      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, marginBottom: 20, letterSpacing: '0.2px' }}>
+        {filtered.length === startups.length
+          ? `${filtered.length} ${filtered.length === 1 ? 'startup' : 'startups'}`
+          : `${filtered.length} of ${startups.length} startups`}
       </div>
 
-      {/* GRID */}
+      {/* ── EMPTY STATE ──────────────────────────────── */}
       {filtered.length === 0 ? (
-        <div style={{ background: '#fff', border: '1px solid #E5E7EB', padding: '64px 32px', textAlign: 'center' }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 8 }}>No results found</div>
-          <p style={{ fontSize: 13, color: '#9CA3AF' }}>Try a different search or stage filter.</p>
+        <div className="card empty-state" style={{ padding: '80px 32px' }}>
+          <div style={{
+            width: 56, height: 56,
+            background: 'var(--n100)',
+            borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: 20,
+          }}>
+            <svg width="24" height="24" fill="none" stroke="var(--n400)" strokeWidth="1.75" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+          <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--n700)', marginBottom: 6 }}>No startups found</p>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 24 }}>
+            {search ? `No results for "${search}". Try a different search.` : 'Try a different stage filter.'}
+          </p>
+          {(search || stage !== 'All') && (
+            <button
+              onClick={() => { setSearch(''); setStage('All') }}
+              className="btn btn-secondary btn-sm"
+              style={{ fontFamily: 'inherit' }}
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       ) : (
-        <div style={{ display: 'grid', gap: 1, background: '#E5E7EB' }} className="grid-startups">
-          {filtered.map((startup) => (
+        /* ── CARD GRID ─────────────────────────────── */
+        <div className="startups-grid">
+          {filtered.map(s => (
             <Link
-              href={`/startups/${startup.id}`}
-              key={startup.id}
+              key={s.id}
+              href={`/startups/${s.id}`}
+              className="card card-interactive"
               style={{
-                background: '#fff',
-                padding: '28px 32px',
-                textDecoration: 'none',
-                color: 'inherit',
-                display: 'block',
-                transition: 'background 0.1s',
+                display: 'flex', flexDirection: 'column',
+                padding: '24px', textDecoration: 'none', color: 'inherit',
+                gap: 0,
               }}
-              className="startup-card"
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, flexWrap: 'wrap' }}>
+              {/* Card header */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 13, minWidth: 0 }}>
                   <div style={{
-                    width: 36, height: 36,
-                    background: '#FFF0E8',
+                    width: 38, height: 38, flexShrink: 0,
+                    borderRadius: 10,
+                    background: 'var(--brand-light)',
+                    color: 'var(--brand)',
+                    fontWeight: 800, fontSize: 16,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#E84A00', fontWeight: 900, fontSize: 15, flexShrink: 0,
-                    borderRadius: 2,
                   }}>
-                    {startup.name.charAt(0)}
+                    {s.name.charAt(0)}
                   </div>
-                  <span style={{ fontSize: 16, fontWeight: 800, color: '#111', letterSpacing: -0.3 }}>
-                    {startup.name}
-                  </span>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', lineHeight: 1.35, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {s.name}
+                    </div>
+                    {s.city && (
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{s.city}</div>
+                    )}
+                  </div>
                 </div>
-                <span className={stageBadgeClass[startup.stage]} style={{ flexShrink: 0 }}>
-                  {startup.stage.charAt(0) + startup.stage.slice(1).toLowerCase()}
+                <span className={stageBadge[s.stage]} style={{ flexShrink: 0 }}>
+                  {STAGE_LABELS[s.stage]}
                 </span>
               </div>
 
-              <p style={{ fontSize: 13, color: '#4B5563', lineHeight: 1.6, marginBottom: 16, marginLeft: 48 }}>
-                {startup.tagline}
+              {/* Tagline */}
+              <p style={{ fontSize: 13, color: 'var(--body)', lineHeight: 1.65, marginBottom: 16, flex: 1 }}>
+                {s.tagline}
               </p>
 
-              {startup.tags.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginLeft: 48, marginBottom: 16 }}>
-                  {startup.tags.slice(0, 4).map(tag => (
-                    <span key={tag} style={{
-                      fontSize: 11, fontWeight: 700, color: '#6B7280',
-                      border: '1px solid #E5E7EB', padding: '2px 8px',
-                      letterSpacing: 0.5, textTransform: 'uppercase',
-                    }}>
-                      {tag}
-                    </span>
+              {/* Tags */}
+              {s.tags.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 16 }}>
+                  {s.tags.slice(0, 4).map(t => (
+                    <span key={t} className="chip">{t}</span>
                   ))}
+                  {s.tags.length > 4 && (
+                    <span className="chip" style={{ color: 'var(--muted)' }}>+{s.tags.length - 4}</span>
+                  )}
                 </div>
               )}
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: 48, paddingTop: 12, borderTop: '1px solid #F3F4F6' }}>
-                <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 500 }}>
-                  {startup.user.name}
+              {/* Footer */}
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                paddingTop: 14, borderTop: '1px solid var(--n100)',
+              }}>
+                <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>
+                  {s.user.name ?? 'Anonymous'}
                 </span>
-                {startup.city && (
-                  <span style={{ fontSize: 12, color: '#9CA3AF' }}>
-                    {startup.city}
+                {s.lookingFor.length > 0 && (
+                  <span style={{ fontSize: 11, color: 'var(--brand)', fontWeight: 600 }}>
+                    Hiring {s.lookingFor.length > 1 ? `${s.lookingFor.length} roles` : s.lookingFor[0]}
                   </span>
                 )}
               </div>
@@ -173,11 +234,13 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
       )}
 
       <style>{`
-        .grid-startups { grid-template-columns: 1fr; }
-        @media (min-width: 768px)  { .grid-startups { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .grid-startups { grid-template-columns: repeat(3, 1fr); } }
-        .startup-card:hover { background: #FAFAFA !important; }
-        @media (max-width: 639px) { .filter-row { flex-direction: column; } }
+        .startups-grid {
+          display: grid;
+          gap: 14px;
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 640px)  { .startups-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .startups-grid { grid-template-columns: repeat(3, 1fr); } }
       `}</style>
     </div>
   )

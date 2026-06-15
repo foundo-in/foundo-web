@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SignOutButton } from '@clerk/nextjs'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Navbar({
   userName,
@@ -13,142 +13,245 @@ export default function Navbar({
   showAuth?: boolean
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
 
-  return (
-    <nav style={{
-      background: '#fff',
-      borderBottom: '1px solid #E5E7EB',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-    }}>
-      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '0 6%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
-        {/* Logo */}
-        <Link
-          href={userName ? '/dashboard' : '/'}
-          style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
-        >
-          <div style={{
-            width: 30, height: 30,
-            borderRadius: '50%',
-            background: '#E84A00',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 900, fontSize: 15,
-          }}>F</div>
-          <span style={{ fontSize: 17, fontWeight: 900, letterSpacing: -0.5, color: '#111' }}>
-            Foundo<span style={{ color: '#E84A00' }}>.in</span>
-          </span>
-        </Link>
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 8)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
 
-        {/* Desktop nav */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-desktop">
+  // Close mobile menu on route change
+  useEffect(() => { setMenuOpen(false) }, [pathname])
+
+  const navLink = (href: string, label: string) => {
+    const active = pathname === href || pathname.startsWith(href + '/')
+    return (
+      <Link
+        href={href}
+        style={{
+          fontSize: 14,
+          fontWeight: active ? 600 : 500,
+          textDecoration: 'none',
+          color: active ? 'var(--ink)' : 'var(--n500)',
+          padding: '4px 0',
+          letterSpacing: '-0.1px',
+          transition: 'color 0.15s ease',
+          position: 'relative',
+        }}
+        className={active ? 'nav-link nav-link-active' : 'nav-link'}
+      >
+        {label}
+      </Link>
+    )
+  }
+
+  return (
+    <>
+      <nav
+        suppressHydrationWarning
+        className={scrolled ? 'site-nav site-nav--scrolled' : 'site-nav'}
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          height: 60,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{
+          maxWidth: 1080,
+          margin: '0 auto',
+          padding: '0 6%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+          gap: 24,
+        }}>
+          {/* Logo */}
           <Link
-            href="/startups"
+            href={userName ? '/dashboard' : '/'}
+            style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none', flexShrink: 0 }}
+          >
+            <div style={{
+              width: 28, height: 28,
+              borderRadius: '50%',
+              background: 'var(--brand)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 900, fontSize: 14, letterSpacing: -0.5,
+              flexShrink: 0,
+            }}>F</div>
+            <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: -0.5, color: 'var(--ink)' }}>
+              Foundo<span style={{ color: 'var(--brand)' }}>.in</span>
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 32, flex: 1 }} className="nav-desktop">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+              {navLink('/startups', 'Browse')}
+              {userName && navLink('/connections', 'Connections')}
+            </div>
+
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {userName ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="nav-user-pill"
+                    style={{
+                      fontSize: 13, fontWeight: 600,
+                      color: 'var(--n700)', textDecoration: 'none',
+                      background: 'var(--n100)',
+                      padding: '5px 12px 5px 7px',
+                      borderRadius: 'var(--r-full)',
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      border: '1px solid var(--n200)',
+                      transition: 'background 0.15s ease, border-color 0.15s ease',
+                    }}
+                  >
+                    <span style={{
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: 'var(--brand)', color: '#fff',
+                      fontSize: 10, fontWeight: 800,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      {userName.charAt(0).toUpperCase()}
+                    </span>
+                    {userName}
+                  </Link>
+                  <SignOutButton>
+                    <button className="btn btn-ghost btn-sm" style={{ fontFamily: 'inherit' }}>
+                      Sign out
+                    </button>
+                  </SignOutButton>
+                </>
+              ) : showAuth ? (
+                <>
+                  <Link href="/sign-in" className="btn btn-ghost btn-sm">
+                    Sign in
+                  </Link>
+                  <Link href="/sign-up" className="btn btn-primary btn-sm">
+                    Get Access
+                  </Link>
+                </>
+              ) : null}
+            </div>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="nav-mobile-btn"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
             style={{
-              fontSize: 13, fontWeight: 600, textDecoration: 'none',
-              color: pathname === '/startups' ? '#E84A00' : '#4B5563',
-              letterSpacing: 0.2,
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '6px',
+              display: 'none',
+              color: 'var(--n700)',
+              borderRadius: 'var(--r-2)',
+              transition: 'background 0.15s ease',
             }}
           >
-            Browse
-          </Link>
-          {userName && (
-            <Link
-              href="/connections"
-              style={{
-                fontSize: 13, fontWeight: 600, textDecoration: 'none',
-                color: pathname === '/connections' ? '#E84A00' : '#4B5563',
-                letterSpacing: 0.2,
-              }}
-            >
-              Connections
-            </Link>
-          )}
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
+              {menuOpen
+                ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu — smooth slide-down */}
+      <div
+        className="mobile-menu-wrap"
+        style={{
+          overflow: 'hidden',
+          maxHeight: menuOpen ? '400px' : '0',
+          opacity: menuOpen ? 1 : 0,
+          transition: 'max-height 0.3s var(--ease-out), opacity 0.2s ease',
+          borderBottom: menuOpen ? '1px solid var(--n100)' : 'none',
+          background: 'rgba(255,255,255,0.96)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          zIndex: 99,
+          position: 'sticky',
+          top: 60,
+        }}
+      >
+        <div style={{ padding: '8px 6% 20px', display: 'flex', flexDirection: 'column' }}>
+          <Link href="/startups" style={mobileLink} onClick={() => setMenuOpen(false)}>Browse Startups</Link>
+          {userName && <Link href="/connections" style={mobileLink} onClick={() => setMenuOpen(false)}>Connections</Link>}
           {userName ? (
             <>
-              <Link
-                href="/dashboard"
-                style={{ fontSize: 13, fontWeight: 600, color: '#4B5563', textDecoration: 'none' }}
-              >
-                {userName}
-              </Link>
+              <Link href="/dashboard" style={mobileLink} onClick={() => setMenuOpen(false)}>Dashboard</Link>
               <SignOutButton>
-                <button style={{
-                  fontSize: 13, fontWeight: 600, color: '#9CA3AF',
-                  background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                }}>
+                <button style={{ ...mobileLink, background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', color: 'var(--muted)', fontFamily: 'inherit', width: '100%', fontSize: 14 }}>
                   Sign out
                 </button>
               </SignOutButton>
             </>
-          ) : showAuth ? (
-            <>
-              <Link
-                href="/sign-in"
-                style={{ fontSize: 13, fontWeight: 600, color: '#4B5563', textDecoration: 'none' }}
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/sign-up"
-                style={{
-                  fontSize: 13, fontWeight: 700, color: '#fff',
-                  background: '#E84A00', padding: '8px 20px',
-                  borderRadius: 6, textDecoration: 'none',
-                  letterSpacing: 0.2,
-                }}
-              >
-                Get Access
-              </Link>
-            </>
-          ) : null}
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          className="nav-mobile-btn"
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'none' }}
-        >
-          <div style={{ width: 20, height: 1.5, background: '#111', marginBottom: 5, transition: 'all 0.2s', transform: menuOpen ? 'rotate(45deg) translateY(6.5px)' : 'none' }} />
-          <div style={{ width: 20, height: 1.5, background: '#111', marginBottom: 5, transition: 'all 0.2s', opacity: menuOpen ? 0 : 1 }} />
-          <div style={{ width: 20, height: 1.5, background: '#111', transition: 'all 0.2s', transform: menuOpen ? 'rotate(-45deg) translateY(-6.5px)' : 'none' }} />
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div style={{
-          borderTop: '1px solid #E5E7EB',
-          padding: '16px 6%',
-          display: 'flex', flexDirection: 'column', gap: 4,
-          background: '#fff',
-        }}>
-          <Link href="/startups" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Browse Startups</Link>
-          {userName && <Link href="/connections" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Connections</Link>}
-          {userName ? (
-            <>
-              <Link href="/dashboard" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Dashboard</Link>
-              <SignOutButton>
-                <button style={{ fontSize: 14, color: '#9CA3AF', background: 'none', border: 'none', textAlign: 'left', padding: '10px 0', cursor: 'pointer' }}>Sign out</button>
-              </SignOutButton>
-            </>
           ) : (
             <>
-              <Link href="/sign-in" style={{ fontSize: 14, color: '#4B5563', textDecoration: 'none', padding: '10px 0', borderBottom: '1px solid #F3F4F6' }} onClick={() => setMenuOpen(false)}>Sign in</Link>
-              <Link href="/sign-up" style={{ fontSize: 14, fontWeight: 700, color: '#fff', background: '#E84A00', textDecoration: 'none', padding: '12px 0', textAlign: 'center', borderRadius: 6, marginTop: 8 }} onClick={() => setMenuOpen(false)}>Get Early Access</Link>
+              <Link href="/sign-in" style={mobileLink} onClick={() => setMenuOpen(false)}>Sign in</Link>
+              <Link
+                href="/sign-up"
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  display: 'block', marginTop: 12,
+                  background: 'var(--brand)', color: '#fff',
+                  padding: '12px 16px', borderRadius: 'var(--r-3)',
+                  fontSize: 14, fontWeight: 600,
+                  textDecoration: 'none', textAlign: 'center',
+                }}
+              >
+                Get Early Access
+              </Link>
             </>
           )}
         </div>
-      )}
+      </div>
 
       <style>{`
+        .site-nav {
+          background: rgba(255,255,255,0.98);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom: 1px solid rgba(229,231,235,0.6);
+          box-shadow: none;
+          transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .site-nav--scrolled {
+          background: rgba(255,255,255,0.88);
+          border-bottom: 1px solid rgba(229,231,235,0.8);
+          box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+        }
         @media (max-width: 767px) {
           .nav-desktop { display: none !important; }
-          .nav-mobile-btn { display: block !important; }
+          .nav-mobile-btn { display: flex !important; align-items: center; justify-content: center; }
+        }
+        .nav-link { display: inline-block; }
+        .nav-link:hover { color: var(--ink) !important; }
+        .nav-user-pill:hover { background: var(--n200) !important; border-color: var(--n300) !important; }
+        @media (min-width: 768px) {
+          .mobile-menu-wrap { display: none !important; }
         }
       `}</style>
-    </nav>
+    </>
   )
+}
+
+const mobileLink: React.CSSProperties = {
+  fontSize: 14,
+  fontWeight: 500,
+  color: 'var(--n700)',
+  textDecoration: 'none',
+  padding: '12px 0',
+  borderBottom: '1px solid var(--n100)',
+  display: 'block',
 }

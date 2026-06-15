@@ -2,13 +2,7 @@
 
 import { useState } from 'react'
 
-export default function ConnectButton({
-  startupId,
-  alreadyConnected,
-}: {
-  startupId: string
-  alreadyConnected: boolean
-}) {
+export default function ConnectButton({ startupId, alreadyConnected }: { startupId: string; alreadyConnected: boolean }) {
   const [connected, setConnected] = useState(alreadyConnected)
   const [loading, setLoading] = useState(false)
   const [showForm, setShowForm] = useState(false)
@@ -18,17 +12,14 @@ export default function ConnectButton({
   async function handleConnect() {
     setLoading(true)
     setError(null)
-
     try {
       const res = await fetch('/api/connections', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ startupId, message }),
       })
-
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed')
-
+      if (!res.ok) throw new Error(data.error || 'Failed to send')
       setConnected(true)
       setShowForm(false)
     } catch (e: any) {
@@ -41,10 +32,16 @@ export default function ConnectButton({
   if (connected) {
     return (
       <span style={{
-        fontSize: 12, fontWeight: 700, color: '#15803D',
-        border: '1.5px solid #15803D', padding: '10px 20px',
-        letterSpacing: 1, textTransform: 'uppercase',
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        fontSize: 13, fontWeight: 600, color: 'var(--green)',
+        background: '#F0FDF4',
+        border: '1px solid #BBF7D0',
+        borderRadius: 6,
+        padding: '0 14px', height: 36,
       }}>
+        <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
         Request Sent
       </span>
     )
@@ -52,41 +49,39 @@ export default function ConnectButton({
 
   if (showForm) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: 300 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 320 }}>
         <textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
           placeholder="Introduce yourself briefly (optional)"
           rows={3}
           style={{
-            border: '1px solid #E5E7EB',
+            width: '100%',
             padding: '10px 12px',
             fontSize: 13,
-            outline: 'none',
-            resize: 'none',
             fontFamily: 'inherit',
-            color: '#111',
-            transition: 'border-color 0.15s',
-            borderRadius: 0,
+            color: 'var(--ink)',
+            background: '#fff',
+            border: '1px solid var(--n200)',
+            borderRadius: 6,
+            resize: 'none',
+            outline: 'none',
+            lineHeight: 1.55,
+            transition: 'border-color 0.15s, box-shadow 0.15s',
           }}
-          onFocus={e => (e.target.style.borderColor = '#E84A00')}
-          onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
+          onFocus={e => { e.target.style.borderColor = 'var(--brand)'; e.target.style.boxShadow = '0 0 0 3px rgba(232,74,0,0.10)' }}
+          onBlur={e => { e.target.style.borderColor = 'var(--n200)'; e.target.style.boxShadow = 'none' }}
         />
-        {error && <p style={{ color: '#B91C1C', fontSize: 12, margin: 0 }}>{error}</p>}
+        {error && (
+          <p style={{ fontSize: 12, color: 'var(--red)', margin: 0, padding: '6px 10px', background: '#FEF2F2', borderRadius: 4 }}>
+            {error}
+          </p>
+        )}
         <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            onClick={handleConnect}
-            disabled={loading}
-            className="btn-primary"
-            style={{ flex: 1, fontSize: 13 }}
-          >
-            {loading ? 'Sending...' : 'Send Request'}
+          <button onClick={handleConnect} disabled={loading} className="btn btn-primary" style={{ flex: 1, fontFamily: 'inherit' }}>
+            {loading ? 'Sending…' : 'Send Request'}
           </button>
-          <button
-            onClick={() => setShowForm(false)}
-            className="btn-outline"
-            style={{ fontSize: 13 }}
-          >
+          <button onClick={() => setShowForm(false)} className="btn btn-secondary" style={{ fontFamily: 'inherit' }}>
             Cancel
           </button>
         </div>
@@ -95,10 +90,7 @@ export default function ConnectButton({
   }
 
   return (
-    <button
-      onClick={() => setShowForm(true)}
-      className="btn-primary"
-    >
+    <button onClick={() => setShowForm(true)} className="btn btn-primary" style={{ fontFamily: 'inherit' }}>
       Connect
     </button>
   )

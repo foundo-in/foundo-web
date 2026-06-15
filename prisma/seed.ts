@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Stage } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import * as dotenv from 'dotenv'
 
@@ -23,7 +23,7 @@ async function main() {
     },
   })
 
-  const startups = [
+  const startups: { name: string; tagline: string; description: string; stage: Stage; city: string; tags: string[]; lookingFor: string[] }[] = [
     {
       name: 'KrishiAI',
       tagline: 'AI-powered crop advisory for small farmers in India',
