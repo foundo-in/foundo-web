@@ -1,8 +1,8 @@
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
-import { SignOutButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import Navbar from '@/components/Navbar'
 
 export default async function DashboardPage() {
   const user = await currentUser()
@@ -49,22 +49,9 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
       {/* TOPBAR */}
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <div className="flex items-center gap-6">
-          <Link href="/startups" className="text-sm text-[#4B5563] hover:text-[#1A1A1A] transition-colors">Browse</Link>
-          <Link href="/connections" className="text-sm text-[#4B5563] hover:text-[#1A1A1A] transition-colors">Connections</Link>
-          <span className="text-sm text-[#4B5563]">{dbUser.name || user.firstName}</span>
-          <SignOutButton>
-            <button className="text-sm text-[#4B5563] hover:text-[#1A1A1A] transition-colors cursor-pointer">Sign out</button>
-          </SignOutButton>
-        </div>
-      </nav>
+      <Navbar userName={dbUser.name?.split(' ')[0] ?? user.firstName ?? ''} />
 
-      <div className="max-w-[1080px] mx-auto px-[6%] py-12">
+        <div className="max-w-[1080px] mx-auto px-4 sm:px-[6%] py-8 sm:py-12">
         {/* HEADER */}
         <div className="mb-10">
           <div className="inline-block bg-[#FFF0E8] text-[#E84A00] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">

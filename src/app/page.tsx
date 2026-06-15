@@ -1,24 +1,12 @@
 import Link from 'next/link'
+import Navbar from '@/components/Navbar'
 
 export default function Home() {
   return (
     <main style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", background: '#fff', color: '#111', overflowX: 'hidden' }}>
 
       {/* NAV */}
-      <nav style={{ borderBottom: '1px solid #E5E7EB', padding: '0 6%', position: 'sticky', top: 0, background: '#fff', zIndex: 100 }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#E84A00', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 16 }}>F</div>
-            <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: -0.5 }}>Foundo<span style={{ color: '#E84A00' }}>.in</span></span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <Link href="/sign-in" style={{ fontSize: 14, color: '#6B7280', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
-            <Link href="/sign-up" style={{ background: '#E84A00', color: '#fff', padding: '8px 20px', borderRadius: 6, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
-              Get Early Access
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar userName="" showAuth />
 
       {/* HERO */}
       <div style={{ maxWidth: 1080, margin: '0 auto', padding: '96px 6% 80px' }}>

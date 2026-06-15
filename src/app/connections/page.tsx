@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import Navbar from '@/components/Navbar'
 
 export default async function ConnectionsPage() {
   const { userId } = await auth()
@@ -38,15 +39,9 @@ export default async function ConnectionsPage() {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <Link href="/dashboard" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">← Dashboard</Link>
-      </nav>
+      <Navbar />
 
-      <div className="max-w-[720px] mx-auto px-[6%] py-12">
+      <div className="max-w-[720px] mx-auto px-4 sm:px-[6%] py-8 sm:py-12">
         <h1 className="text-3xl font-black tracking-tight mb-2">Connections</h1>
         <p className="text-[#4B5563] mb-10">People who want to connect with you, and requests you've sent.</p>
 

@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import StartupsClient from '@/components/StartupsClient'
+import Navbar from '@/components/Navbar'
 
 const stageColors: Record<string, string> = {
   IDEA: 'bg-purple-100 text-purple-700',
@@ -21,18 +22,7 @@ export default async function StartupsPage() {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">Dashboard</Link>
-          <Link href="/startups/new" className="bg-[#E84A00] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#cf4000] transition-colors">
-            + List Startup
-          </Link>
-        </div>
-      </nav>
+      <Navbar showAuth />
 
       <div className="max-w-[1080px] mx-auto px-[6%] py-12">
         <div className="mb-10">

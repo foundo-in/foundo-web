@@ -1,7 +1,7 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Navbar from '@/components/Navbar'
 
 const stages = ['IDEA', 'VALIDATION', 'MVP', 'GROWTH', 'SCALING']
 const lookingForOptions = [
@@ -78,17 +78,9 @@ export default function NewStartupPage() {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <button onClick={() => router.push('/dashboard')} className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">
-          ← Back to Dashboard
-        </button>
-      </nav>
+      <Navbar showAuth />
 
-      <div className="max-w-2xl mx-auto px-[6%] py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-[6%] py-8 sm:py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-black tracking-tight mb-2">List your startup</h1>
           <p className="text-[#4B5563]">Tell people what you're building and who you're looking for.</p>

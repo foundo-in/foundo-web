@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import ConnectButton from '@/components/ConnectButton'
+import Navbar from '@/components/Navbar'
 
 const stageColors: Record<string, string> = {
   IDEA: 'bg-purple-100 text-purple-700',
@@ -40,13 +41,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <Link href="/startups" className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">← Browse Startups</Link>
-      </nav>
+      <Navbar showAuth />
 
       <div className="max-w-[720px] mx-auto px-[6%] py-12">
         {/* HEADER */}

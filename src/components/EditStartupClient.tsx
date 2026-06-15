@@ -1,5 +1,5 @@
 'use client'
-
+import Navbar from '@/components/Navbar'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -105,15 +105,7 @@ export default function EditStartupClient({ startup }: { startup: Startup }) {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
-      <nav className="bg-white border-b border-[#E5E7EB] px-[6%] h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-base">F</div>
-          <span className="text-lg font-black tracking-tight">Foundo<span className="text-[#E84A00]">.in</span></span>
-        </div>
-        <button onClick={() => router.push(`/startups/${startup.id}`)} className="text-sm text-[#4B5563] hover:text-[#1A1A1A]">
-          ← Back
-        </button>
-      </nav>
+      <Navbar showAuth />
 
       <div className="max-w-2xl mx-auto px-[6%] py-12">
         <div className="flex items-center justify-between mb-8">

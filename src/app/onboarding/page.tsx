@@ -58,7 +58,7 @@ export default function OnboardingPage() {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] flex items-center justify-center px-4 py-16">
-      <div className="max-w-2xl w-full">
+      <div className="max-w-2xl w-full px-4">
         <div className="text-center mb-10">
           <div className="w-12 h-12 rounded-full bg-[#E84A00] flex items-center justify-center text-white font-black text-2xl mx-auto mb-4">F</div>
           <h1 className="text-4xl font-black tracking-tight mb-2">Who are you?</h1>
