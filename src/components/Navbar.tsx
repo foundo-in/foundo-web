@@ -100,6 +100,13 @@ export default function Navbar({
               {userName ? (
                 <>
                   <Link
+                    href="/profile/edit"
+                    className="btn btn-ghost btn-sm"
+                    style={{ fontFamily: 'inherit', color: 'var(--n600)' }}
+                  >
+                    Edit Profile
+                  </Link>
+                  <Link
                     href="/dashboard"
                     className="nav-user-pill"
                     style={{
@@ -189,6 +196,7 @@ export default function Navbar({
           {userName ? (
             <>
               <Link href="/dashboard" style={mobileLink} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link href="/profile/edit" style={mobileLink} onClick={() => setMenuOpen(false)}>Edit Profile</Link>
               <SignOutButton>
                 <button style={{ ...mobileLink, background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', color: 'var(--muted)', fontFamily: 'inherit', width: '100%', fontSize: 14 }}>
                   Sign out

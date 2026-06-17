@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
 const STAGES = ['All', 'IDEA', 'VALIDATION', 'MVP', 'GROWTH', 'SCALING']
 const STAGE_LABELS: Record<string, string> = {
@@ -20,8 +21,24 @@ type Startup = {
 }
 
 export default function StartupsClient({ startups }: { startups: Startup[] }) {
-  const [search, setSearch] = useState('')
-  const [stage, setStage] = useState('All')
+  const searchParams  = useSearchParams()
+
+  const [search,     setSearch]     = useState('')
+  const [stage,      setStage]      = useState('All')
+  const [lookingFor, setLookingFor] = useState('All')
+
+  // Seed filter from URL param (e.g. /startups?lookingFor=Investor)
+  useEffect(() => {
+    const lf = searchParams.get('lookingFor')
+    if (lf) setLookingFor(lf)
+  }, [searchParams])
+
+  // Build the deduplicated list of all lookingFor values across startups
+  const lookingForOptions = useMemo(() => {
+    const all = startups.flatMap(s => s.lookingFor)
+    const unique = Array.from(new Set(all)).sort()
+    return ['All', ...unique]
+  }, [startups])
 
   const filtered = useMemo(() => startups.filter(s => {
     const q = search.toLowerCase()
@@ -30,8 +47,12 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
       s.tagline.toLowerCase().includes(q) ||
       s.tags.some(t => t.toLowerCase().includes(q)) ||
       (s.city ?? '').toLowerCase().includes(q)
-    return matchSearch && (stage === 'All' || s.stage === stage)
-  }), [startups, search, stage])
+    const matchStage     = stage      === 'All' || s.stage === stage
+    const matchLookingFor = lookingFor === 'All' || s.lookingFor.includes(lookingFor)
+    return matchSearch && matchStage && matchLookingFor
+  }), [startups, search, stage, lookingFor])
+
+  const hasActiveFilter = search || stage !== 'All' || lookingFor !== 'All'
 
   return (
     <div>
@@ -91,41 +112,93 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
         </div>
 
         {/* Stage pills */}
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {STAGES.map(s => {
-            const active = stage === s
-            return (
-              <button
-                key={s}
-                onClick={() => setStage(s)}
-                style={{
-                  height: 32,
-                  padding: '0 14px',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  fontFamily: 'inherit',
-                  borderRadius: 'var(--r-full)',
-                  border: active ? '1px solid var(--brand)' : '1px solid var(--n200)',
-                  background: active ? 'var(--brand)' : '#fff',
-                  color: active ? '#fff' : 'var(--n600)',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  boxShadow: active ? '0 1px 4px rgba(232,74,0,0.2)' : 'var(--sh-xs)',
-                  letterSpacing: '0.1px',
-                }}
-              >
-                {STAGE_LABELS[s]}
-              </button>
-            )
-          })}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: 8 }}>Stage</p>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {STAGES.map(s => {
+              const active = stage === s
+              return (
+                <button
+                  key={s}
+                  onClick={() => setStage(s)}
+                  style={{
+                    height: 32,
+                    padding: '0 14px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    fontFamily: 'inherit',
+                    borderRadius: 'var(--r-full)',
+                    border: active ? '1px solid var(--brand)' : '1px solid var(--n200)',
+                    background: active ? 'var(--brand)' : '#fff',
+                    color: active ? '#fff' : 'var(--n600)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    boxShadow: active ? '0 1px 4px rgba(232,74,0,0.2)' : 'var(--sh-xs)',
+                    letterSpacing: '0.1px',
+                  }}
+                >
+                  {STAGE_LABELS[s]}
+                </button>
+              )
+            })}
+          </div>
         </div>
+
+        {/* Looking For pills */}
+        {lookingForOptions.length > 1 && (
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: 8 }}>Looking For</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {lookingForOptions.map(opt => {
+                const active = lookingFor === opt
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => setLookingFor(opt)}
+                    style={{
+                      height: 32,
+                      padding: '0 14px',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      fontFamily: 'inherit',
+                      borderRadius: 'var(--r-full)',
+                      border: active ? '1.5px solid var(--brand)' : '1px solid var(--n200)',
+                      background: active ? 'var(--brand-light)' : '#fff',
+                      color: active ? 'var(--brand)' : 'var(--n600)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      boxShadow: active ? '0 0 0 3px rgba(232,74,0,0.09)' : 'var(--sh-xs)',
+                      letterSpacing: '0.1px',
+                    }}
+                  >
+                    {opt}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── RESULT META ──────────────────────────────── */}
-      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, marginBottom: 20, letterSpacing: '0.2px' }}>
-        {filtered.length === startups.length
-          ? `${filtered.length} ${filtered.length === 1 ? 'startup' : 'startups'}`
-          : `${filtered.length} of ${startups.length} startups`}
+      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, marginBottom: 20, letterSpacing: '0.2px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span>
+          {filtered.length === startups.length
+            ? `${filtered.length} ${filtered.length === 1 ? 'startup' : 'startups'}`
+            : `${filtered.length} of ${startups.length} startups`}
+        </span>
+        {hasActiveFilter && (
+          <button
+            onClick={() => { setSearch(''); setStage('All'); setLookingFor('All') }}
+            style={{
+              fontSize: 11, fontWeight: 600, color: 'var(--brand)',
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              fontFamily: 'inherit', letterSpacing: '0.1px',
+            }}
+          >
+            Clear filters ×
+          </button>
+        )}
       </div>
 
       {/* ── EMPTY STATE ──────────────────────────────── */}
@@ -144,11 +217,11 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
           </div>
           <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--n700)', marginBottom: 6 }}>No startups found</p>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 24 }}>
-            {search ? `No results for "${search}". Try a different search.` : 'Try a different stage filter.'}
+            {search ? `No results for "${search}". Try a different search.` : 'Try a different filter combination.'}
           </p>
-          {(search || stage !== 'All') && (
+          {hasActiveFilter && (
             <button
-              onClick={() => { setSearch(''); setStage('All') }}
+              onClick={() => { setSearch(''); setStage('All'); setLookingFor('All') }}
               className="btn btn-secondary btn-sm"
               style={{ fontFamily: 'inherit' }}
             >
@@ -224,7 +297,7 @@ export default function StartupsClient({ startups }: { startups: Startup[] }) {
                 </span>
                 {s.lookingFor.length > 0 && (
                   <span style={{ fontSize: 11, color: 'var(--brand)', fontWeight: 600 }}>
-                    Hiring {s.lookingFor.length > 1 ? `${s.lookingFor.length} roles` : s.lookingFor[0]}
+                    Needs {s.lookingFor.length > 1 ? `${s.lookingFor.length} roles` : s.lookingFor[0]}
                   </span>
                 )}
               </div>
