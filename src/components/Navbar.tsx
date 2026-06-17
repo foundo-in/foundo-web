@@ -174,14 +174,13 @@ export default function Navbar({
           overflow: 'hidden',
           maxHeight: menuOpen ? '400px' : '0',
           opacity: menuOpen ? 1 : 0,
-          transition: 'max-height 0.3s var(--ease-out), opacity 0.2s ease',
+          transition: 'max-height 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease',
           borderBottom: menuOpen ? '1px solid var(--n100)' : 'none',
-          background: 'rgba(255,255,255,0.96)',
+          background: 'rgba(255,255,255,0.97)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
+          position: 'relative',
           zIndex: 99,
-          position: 'sticky',
-          top: 60,
         }}
       >
         <div style={{ padding: '8px 6% 20px', display: 'flex', flexDirection: 'column' }}>
@@ -234,9 +233,27 @@ export default function Navbar({
         @media (max-width: 767px) {
           .nav-desktop { display: none !important; }
           .nav-mobile-btn { display: flex !important; align-items: center; justify-content: center; }
+          .nav-mobile-btn:hover { background: var(--n100); }
         }
-        .nav-link { display: inline-block; }
+        .nav-link { display: inline-block; position: relative; }
         .nav-link:hover { color: var(--ink) !important; }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: var(--brand);
+          border-radius: 2px;
+          opacity: 0;
+          transform: scaleX(0.5);
+          transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .nav-link-active::after {
+          opacity: 1;
+          transform: scaleX(1);
+        }
         .nav-user-pill:hover { background: var(--n200) !important; border-color: var(--n300) !important; }
         @media (min-width: 768px) {
           .mobile-menu-wrap { display: none !important; }

@@ -38,7 +38,7 @@ export default async function ConnectionsPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ground)' }}>
-      <Navbar />
+      <Navbar userName={user.name?.split(' ')[0] ?? ''} />
 
       <div className="page-wrap-sm">
 

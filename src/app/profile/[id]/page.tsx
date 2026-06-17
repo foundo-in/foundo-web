@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { auth } from '@clerk/nextjs/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
@@ -13,15 +14,23 @@ const stageBadge: Record<string, string> = {
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const { userId } = await auth()
 
-  const user = await prisma.user.findUnique({
-    where: { id },
-    include: {
-      startups: { where: { isPublished: true }, orderBy: { createdAt: 'desc' } },
-      profile: true,
-    },
-  })
+  const [user, me] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id },
+      include: {
+        startups: { where: { isPublished: true }, orderBy: { createdAt: 'desc' } },
+        profile: true,
+      },
+    }),
+    userId
+      ? prisma.user.findUnique({ where: { clerkId: userId }, select: { name: true } })
+      : null,
+  ])
   if (!user) notFound()
+
+  const currentUserName = me?.name?.split(' ')[0] ?? ''
 
   const initials = user.name
     ?.split(' ')
@@ -32,7 +41,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ground)' }}>
-      <Navbar showAuth />
+      <Navbar userName={currentUserName} showAuth />
 
       <div className="page-wrap-sm">
 

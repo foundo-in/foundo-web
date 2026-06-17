@@ -56,7 +56,7 @@ type Startup = {
   website: string | null; linkedin: string | null
 }
 
-export default function EditStartupClient({ startup }: { startup: Startup }) {
+export default function EditStartupClient({ startup, userName = '' }: { startup: Startup; userName?: string }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -140,7 +140,7 @@ export default function EditStartupClient({ startup }: { startup: Startup }) {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ground)' }}>
-      <Navbar showAuth />
+      <Navbar userName={userName} />
 
       <div className="page-wrap-sm">
         {/* Header */}

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useUser } from '@clerk/nextjs'
 import Navbar from '@/components/Navbar'
 
 const STAGES = ['IDEA', 'VALIDATION', 'MVP', 'GROWTH', 'SCALING']
@@ -52,6 +53,8 @@ function FieldGroup({ label, required, hint, children }: { label: string; requir
 
 export default function NewStartupPage() {
   const router = useRouter()
+  const { user } = useUser()
+  const firstName = user?.firstName ?? user?.fullName?.split(' ')[0] ?? ''
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tagInput, setTagInput] = useState('')
@@ -120,7 +123,7 @@ export default function NewStartupPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ground)' }}>
-      <Navbar showAuth />
+      <Navbar userName={firstName} />
 
       <div className="page-wrap-sm">
         {/* Header */}

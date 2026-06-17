@@ -27,9 +27,9 @@ export default function Home() {
             color: '#0D0D0D',
           }}
         >
-          The right people<br />
-          are out there.<br />
-          <span style={{ color: 'var(--brand)' }}>Find them.</span>
+          Every big dream<br />
+          needs the right<br />
+          <span style={{ color: 'var(--brand)' }}>people.</span>
         </h1>
 
         <p
@@ -84,9 +84,9 @@ export default function Home() {
           }}
         >
           {[
-            { n: '5Cr+', l: 'students with no startup access' },
-            { n: '90%',  l: 'founders struggle to find co-founders' },
-            { n: '₹20L', l: 'idle investment with no trusted outlet' },
+            { n: '5Cr+', l: 'college students with no startup ecosystem access' },
+            { n: '90%',  l: 'founders say finding a co-founder is their #1 challenge' },
+            { n: '₹5–50L', l: 'idle mid-class investment with no trusted channel' },
           ].map((s, i) => (
             <div
               key={s.n}
@@ -105,7 +105,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── THE GAP — dark editorial section ─────────── */}
+      {/* ── THE PROBLEM — dark editorial section ─────── */}
       <section style={{ background: '#0D0D0D', padding: '104px 6%' }}>
         <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--brand)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 28 }}>
@@ -120,14 +120,14 @@ export default function Home() {
             lineHeight: 1.08,
             marginBottom: 72,
           }}>
-            The talent exists.<br />The capital exists.<br />
-            <span style={{ color: 'var(--n600)' }}>The connection doesn't.</span>
+            The talent exists.<br />The money exists.<br />
+            <span style={{ color: 'var(--n600)' }}>The gap is connection.</span>
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 1, background: '#1A1A1A', borderRadius: 12, overflow: 'hidden' }}>
             {[
-              { who: 'The Student',  pain: 'Has an idea. Has time. Has drive. Has no one to talk to about it.' },
-              { who: 'The Investor', pain: 'Has ₹5–20L sitting idle. Wants to back something real. Doesn\'t know who to trust.' },
-              { who: 'The Founder',  pain: 'Building alone. Needs a co-founder, a first hire, or someone who just gets it.' },
+              { who: 'Students, stuck alone',     pain: 'College students with innovative ideas have zero access to mentors, funds, or co-builders.' },
+              { who: 'Investors, idle money',     pain: 'Mid-level investors want to back early ideas but don\'t know where to find credible founders.' },
+              { who: 'Founders, can\'t find each other', pain: 'A developer in Jaipur and a marketer in Pune are building the same thing — separately.' },
             ].map(p => (
               <div key={p.who} style={{ background: '#0D0D0D', padding: '40px 36px' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--brand)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 20 }}>
@@ -140,11 +140,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── WHAT FOUNDO DOES ─────────────────────────── */}
+      {/* ── THE SOLUTION ──────────────────────────────── */}
       <section style={{ padding: '104px 6%' }}>
         <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--brand)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 28 }}>
-            What we do
+            The solution
           </div>
           <h2 style={{
             fontSize: 'clamp(30px, 4vw, 52px)',
@@ -154,17 +154,17 @@ export default function Home() {
             lineHeight: 1.08,
             color: '#0D0D0D',
           }}>
-            One place.<br />Every person you need.
+            India's first startup<br />connection platform.
           </h2>
           <p style={{ fontSize: 17, color: 'var(--body)', maxWidth: 500, lineHeight: 1.7, marginBottom: 72, fontWeight: 400 }}>
-            Post your startup. Browse investors. Find co-founders. Validate ideas. All in one platform built specifically for India's startup ecosystem.
+            One platform built for real startup connections — for every person who wants to build something in India.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
             {[
-              { tag: 'Founders',  title: 'Startup Profiles', body: 'List your idea and what you need. Live in 5 minutes.' },
-              { tag: 'Investors', title: 'Direct Access',     body: 'No agents. Browse real founders. Connect directly.' },
-              { tag: 'Builders',  title: 'Collab Board',      body: 'Find your team. Share skills. Build together.' },
-              { tag: 'Students',  title: 'Idea Validation',   body: 'Real feedback before you spend a single rupee.' },
+              { tag: 'Founders',  title: 'Startup Profiles',   body: 'List your idea, stage, and what you need. Go live in under 5 minutes.' },
+              { tag: 'Investors', title: 'Investor Matching',  body: 'Browse real startups. No agents. No gatekeepers. Direct connect.' },
+              { tag: 'Builders',  title: 'Collab Requests',    body: 'Find co-builders across India to share skills, resources, and market access.' },
+              { tag: 'Students',  title: 'Idea Validation',    body: 'Get real community feedback before spending a single rupee.' },
             ].map(f => (
               <div
                 key={f.tag}
@@ -206,13 +206,13 @@ export default function Home() {
       <section style={{ background: '#0D0D0D', padding: '88px 6%' }}>
         <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--brand)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 56 }}>
-            Why Foundo exists
+            Real people, real gaps
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 40 }}>
             {[
-              { q: '8 months looking for a co-founder. Every platform I tried was useless for this.', by: 'Founder, Bengaluru' },
+              { q: 'I\'ve been looking for a co-founder for 8 months. Every platform I tried was useless for this.', by: 'Startup founder, Bengaluru' },
               { q: 'I want to invest in real ideas. I just don\'t know who to trust or where to go.', by: 'IT professional, Lucknow' },
-              { q: '200 students in our college working on projects. None know how to take it forward.', by: 'Professor, Hyderabad' },
+              { q: '200 students in our college working on projects — none know how to take it forward.', by: 'College professor, Hyderabad' },
             ].map(q => (
               <div key={q.by} style={{ borderTop: '1px solid #2A2A2A', paddingTop: 28 }}>
                 <blockquote style={{
@@ -251,6 +251,7 @@ export default function Home() {
             Your people are<br />already here.
           </h2>
           <p style={{ fontSize: 18, color: 'var(--body)', marginBottom: 48, lineHeight: 1.6, fontWeight: 400 }}>
+            No payment. No long form. Just tell us you're in.<br />
             Be among the first 1,000 members on Foundo.in.
           </p>
           <Link
@@ -272,7 +273,7 @@ export default function Home() {
             }}
             className="hero-cta"
           >
-            Join Now — It's Free
+            I'm In — Join the List
           </Link>
         </div>
       </section>

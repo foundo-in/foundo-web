@@ -14,5 +14,6 @@ export default async function EditStartupPage({ params }: { params: Promise<{ id
   const dbUser = await prisma.user.findUnique({ where: { clerkId: userId } })
   if (!dbUser || startup.userId !== dbUser.id) redirect('/dashboard')
 
-  return <EditStartupClient startup={startup} />
+  const firstName = dbUser.name?.split(' ')[0] ?? ''
+  return <EditStartupClient startup={startup} userName={firstName} />
 }

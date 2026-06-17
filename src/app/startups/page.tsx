@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { auth } from '@clerk/nextjs/server'
 import StartupsClient from '@/components/StartupsClient'
 import Navbar from '@/components/Navbar'
 import type { Metadata } from 'next'
@@ -9,15 +10,24 @@ export const metadata: Metadata = {
 }
 
 export default async function StartupsPage() {
-  const startups = await prisma.startup.findMany({
-    where: { isPublished: true },
-    include: { user: { select: { name: true, city: true } } },
-    orderBy: { createdAt: 'desc' },
-  })
+  const { userId } = await auth()
+
+  const [startups, me] = await Promise.all([
+    prisma.startup.findMany({
+      where: { isPublished: true },
+      include: { user: { select: { name: true, city: true } } },
+      orderBy: { createdAt: 'desc' },
+    }),
+    userId
+      ? prisma.user.findUnique({ where: { clerkId: userId }, select: { name: true } })
+      : null,
+  ])
+
+  const userName = me?.name?.split(' ')[0] ?? ''
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ground)' }}>
-      <Navbar showAuth />
+      <Navbar userName={userName} showAuth />
 
       <div className="page-wrap">
         {/* Page header */}
