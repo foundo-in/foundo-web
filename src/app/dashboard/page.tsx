@@ -82,16 +82,18 @@ export default async function DashboardPage() {
           <p style={{ fontSize: 16, color: 'var(--body)', lineHeight: 1.65 }}>{tagline}</p>
         </div>
 
-        {/* ── MY STARTUPS ─────────────────────────────── */}
-        {dbUser.startups.length > 0 && (
-          <section style={{ marginBottom: 56 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <span className="section-label">My Startups</span>
+      {/* ── MY STARTUPS ─────────────────────────────── */}
+        <section style={{ marginBottom: 56 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+            <span className="section-label">My Startups</span>
+            {dbUser.startups.length > 0 && (
               <Link href="/startups/new" className="btn btn-secondary btn-sm">
                 + New Startup
               </Link>
-            </div>
+            )}
+          </div>
 
+          {dbUser.startups.length > 0 ? (
             <div className="dash-startups-grid">
               {dbUser.startups.map(s => (
                 <Link
@@ -128,8 +130,36 @@ export default async function DashboardPage() {
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          ) : (
+            <div className="card" style={{ padding: '40px 28px', textAlign: 'center' }}>
+              <div style={{
+                width: 48, height: 48, margin: '0 auto 16px',
+                background: 'var(--brand-light)',
+                borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 20,
+              }}>
+                {dbUser.role === 'INVESTOR' ? '🔍' : '🚀'}
+              </div>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 6 }}>
+                {dbUser.role === 'INVESTOR' ? 'No startups in your watchlist yet' : 'No startups listed yet'}
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20, maxWidth: 360, marginLeft: 'auto', marginRight: 'auto' }}>
+                {dbUser.role === 'INVESTOR'
+                  ? 'Browse founders looking for funding and reach out directly.'
+                  : dbUser.role === 'FOUNDER'
+                  ? 'List your startup and start getting noticed by investors, builders, and collaborators.'
+                  : 'See what others are building, or list your own idea to get feedback.'}
+              </p>
+              <Link
+                href={dbUser.role === 'INVESTOR' ? '/startups?lookingFor=Investor' : '/startups/new'}
+                className="btn btn-primary btn-sm"
+              >
+                {dbUser.role === 'INVESTOR' ? 'Browse Startups' : 'List Your Startup'}
+              </Link>
+            </div>
+          )}
+        </section>
 
         {/* ── QUICK ACTIONS ────────────────────────────── */}
         <section style={{ marginBottom: 56 }}>
