@@ -23,6 +23,19 @@ async function main() {
     },
   })
 
+  await prisma.profile.upsert({
+  where: { userId: seedUser.id },
+  update: {},
+  create: {
+    userId: seedUser.id,
+    bio: 'Serial builder backing multiple early-stage ideas across AgriTech, FinTech, and HealthTech. Always open to connecting with sharp co-founders and operators.',
+    stage: 'Multiple',
+    lookingFor: ['Co-founder', 'Investor', 'Mentor'],
+    tags: ['AgriTech', 'FinTech', 'HealthTech', 'AI'],
+    linkedin: 'https://linkedin.com/in/foundo-demo',
+  },
+})
+
   const startups: { name: string; tagline: string; description: string; stage: Stage; city: string; tags: string[]; lookingFor: string[] }[] = [
     {
       name: 'KrishiAI',
